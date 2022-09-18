@@ -34,7 +34,7 @@ app.include_router(
     prefix="/users",
     tags=["users"],
 )
-app.include_router(ext_router)
+app.include_router(ext_router, prefix="/ext", tags=["Extensions"])
 
 
 @app.on_event("startup")

@@ -9,10 +9,10 @@ from app.db import User
 
 
 async def add_extension(
-    db: Session, i: schema.ExtensionInput, user: User
+    db: Session, input: schema.ExtensionInput, user: User
 ) -> schema.Extension:
     db_ext = models.Extension(
-        **i.dict(),
+        **input.dict(),
         owner=str(user.id),
     )
     db.add(db_ext)
@@ -34,15 +34,18 @@ async def delete_extension(id: int) -> schema.Extension:
 
 
 async def update_extension(
-    db: Session, i: schema.ExtensionUpdateInput, user: User
+    id: int,
+    db: Session,
+    input: schema.ExtensionUpdateInput,
+    user: User,
 ) -> list[schema.Extension]:
     # get extension from the database and check if the user doesn't lie to us
-    db_ext = await db.get(models.Extension, i.id)
+    db_ext = await db.get(models.Extension, id)
     if db_ext.owner != str(user.id):
         raise Exception("You are not the owner of this extension!")
 
     # update the extension
-    for k, v in i.dict().items():
+    for k, v in input.dict().items():
         if v is not None and k != "id":
             setattr(db_ext, k, v)
 

@@ -1,5 +1,6 @@
 from fastapi import Query
 from app.models import ORJSONModel
+from app.versions.schema import ExtensionVersion
 
 # PYDANTIC SCHEMAS
 
@@ -20,7 +21,6 @@ class ExtensionInput(ExtensionBase):
 
 
 class ExtensionUpdateInput(ORJSONModel):
-    id: int = Query(description="UUID of the extension")
     name: str = Query(None, description="Short name of the extension")
     description_short: str = Query(
         None,
@@ -29,17 +29,6 @@ class ExtensionUpdateInput(ORJSONModel):
     description_long: str = Query(
         None, description="An elaborate description what the extension does"
     )
-
-
-class ExtensionVersion(ORJSONModel):
-    id: int
-    major: int
-    minor: int
-    patch: int
-    note: str = ""
-
-    class Config:
-        orm_mode = True
 
 
 class Extension(ExtensionBase):

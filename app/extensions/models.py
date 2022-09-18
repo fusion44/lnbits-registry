@@ -25,21 +25,3 @@ class Extension(Base):
         self.description_short = description_short
         self.description_long = description_long
         self.owner = owner
-
-
-class ExtensionVersion(Base):
-    __tablename__ = "extension_version"
-
-    id = Column(Integer, primary_key=True, index=True)
-    major = Column(Integer)
-    minor = Column(Integer)
-    patch = Column(Integer)
-    note = Column(String, default=None)
-    parent_id = Column(Integer, ForeignKey("extension.id"))
-
-    def __init__(self, major, minor, patch, note, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        self.major = major
-        self.minor = minor
-        self.patch = patch
-        self.note = note
