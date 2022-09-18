@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "lnbits-registry"
+version = "0.1.0"
+description = "An extension registry for LNbits"
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "lnbits_registry"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.85.0"
+aiosqlite = "^0.17.0"
+fastapi-users = {extras = ["sqlalchemy"], version = "^10.1.5"}
+uvicorn = {extras = ["standard"], version = "^0.18.3"}
+SQLAlchemy = "^1.4.41"
+alembic = "^1.8.1"
+orjson = "^3.8.0"
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.10.1"
+black = "^22.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
