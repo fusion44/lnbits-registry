@@ -24,7 +24,7 @@ async def add_extension_version(
 
 @router.post("/delete/{version_id}", response_model=s.ExtensionVersion)
 async def delete_extension_version(
-    id: int = Body(description="ID of the extension"),
+    version_id: int = Query(description="ID of the extension"),
     user: User = Depends(current_active_user),
     db: Session = Depends(get_async_session),
     description="Delete an extension",
@@ -53,6 +53,7 @@ async def update_extension_version(
     summary="Upload a extension zip file",
 )
 async def upload_extension_version_file(
+    version_id: int = Query(description="ID of the version this file belongs to"),
     db: Session = Depends(get_async_session),
     user: User = Depends(current_active_user),
 ):
