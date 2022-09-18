@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.db import create_db_and_tables
 from app.users import jwt_backend, cookie_backend, fastapi_users
 from app.extensions.router import router as ext_router
+from app.versions.router import router as vs_router
 from app.schemas import UserRead, UserCreate, UserUpdate
 
 app = FastAPI()
@@ -35,6 +36,7 @@ app.include_router(
     tags=["users"],
 )
 app.include_router(ext_router, prefix="/ext", tags=["Extensions"])
+app.include_router(vs_router, prefix="/version", tags=["Versions"])
 
 
 @app.on_event("startup")
