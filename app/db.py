@@ -5,14 +5,14 @@ from fastapi_users.db import SQLAlchemyUserDatabase, SQLAlchemyBaseUserTableUUID
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, String
 
-
-DATABASE_URL = "sqlite+aiosqlite:///./test.db"
+DATABASE_URL = "sqlite+aiosqlite:///./test.sqlite"
 Base: DeclarativeMeta = declarative_base()
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
-    pass
+    display_name = Column(String(length=32), nullable=False)
 
 
 # connect_args={"check_same_thread": False} is only necessary for SQlite

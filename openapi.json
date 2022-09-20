@@ -474,10 +474,62 @@
         }
       }
     },
+    "/users/profile/{user_id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get Profile",
+        "description": "Get the public user profile",
+        "operationId": "get_profile_users_profile__user_id__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "User Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "user_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ]
+      }
+    },
     "/users/me": {
       "get": {
         "tags": [
-          "users"
+          "Users"
         ],
         "summary": "Users:Current User",
         "operationId": "users_current_user_users_me_get",
@@ -507,7 +559,7 @@
       },
       "patch": {
         "tags": [
-          "users"
+          "Users"
         ],
         "summary": "Users:Patch Current User",
         "operationId": "users_patch_current_user_users_me_patch",
@@ -586,7 +638,7 @@
     "/users/{id}": {
       "get": {
         "tags": [
-          "users"
+          "Users"
         ],
         "summary": "Users:User",
         "operationId": "users_user_users__id__get",
@@ -642,7 +694,7 @@
       },
       "delete": {
         "tags": [
-          "users"
+          "Users"
         ],
         "summary": "Users:Delete User",
         "operationId": "users_delete_user_users__id__delete",
@@ -691,7 +743,7 @@
       },
       "patch": {
         "tags": [
-          "users"
+          "Users"
         ],
         "summary": "Users:Patch User",
         "operationId": "users_patch_user_users__id__patch",
@@ -1687,7 +1739,8 @@
         "title": "UserCreate",
         "required": [
           "email",
-          "password"
+          "password",
+          "display_name"
         ],
         "type": "object",
         "properties": {
@@ -1714,18 +1767,59 @@
             "title": "Is Verified",
             "type": "boolean",
             "default": false
+          },
+          "display_name": {
+            "title": "Display Name",
+            "maxLength": 32,
+            "minLength": 3,
+            "type": "string",
+            "description": "Display name of the user"
+          }
+        }
+      },
+      "UserProfile": {
+        "title": "UserProfile",
+        "required": [
+          "id",
+          "is_active",
+          "display_name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string",
+            "description": "UUID of the user",
+            "format": "uuid"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean",
+            "description": "Is the user active"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "maxLength": 32,
+            "minLength": 3,
+            "type": "string",
+            "description": "Display name of the user"
           }
         }
       },
       "UserRead": {
         "title": "UserRead",
         "required": [
-          "email"
+          "id",
+          "email",
+          "display_name"
         ],
         "type": "object",
         "properties": {
           "id": {
-            "title": "Id"
+            "title": "Id",
+            "type": "string",
+            "description": "UUID of the user",
+            "format": "uuid"
           },
           "email": {
             "title": "Email",
@@ -1746,12 +1840,22 @@
             "title": "Is Verified",
             "type": "boolean",
             "default": false
+          },
+          "display_name": {
+            "title": "Display Name",
+            "maxLength": 32,
+            "minLength": 3,
+            "type": "string",
+            "description": "Display name of the user"
           }
         },
         "description": "Base User model."
       },
       "UserUpdate": {
         "title": "UserUpdate",
+        "required": [
+          "display_name"
+        ],
         "type": "object",
         "properties": {
           "password": {
@@ -1774,6 +1878,13 @@
           "is_verified": {
             "title": "Is Verified",
             "type": "boolean"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "maxLength": 32,
+            "minLength": 3,
+            "type": "string",
+            "description": "Display name of the user"
           }
         }
       },

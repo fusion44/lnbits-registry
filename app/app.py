@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.auth.router import custom_auth_router
 from app.db import create_db_and_tables
 from app.users import jwt_backend, cookie_backend, fastapi_users
 from app.extensions.router import router as ext_router
@@ -39,10 +40,11 @@ app.include_router(
     prefix="/auth",
     tags=["auth"],
 )
+app.include_router(custom_auth_router, prefix="/users", tags=["Users"])
 app.include_router(
     fastapi_users.get_users_router(UserRead, UserUpdate),
     prefix="/users",
-    tags=["users"],
+    tags=["Users"],
 )
 app.include_router(ext_router, prefix="/ext", tags=["Extensions"])
 app.include_router(vs_router, prefix="/version", tags=["Versions"])
