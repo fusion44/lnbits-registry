@@ -5,9 +5,18 @@ from app.users import jwt_backend, cookie_backend, fastapi_users
 from app.extensions.router import router as ext_router
 from app.versions.router import router as vs_router
 from app.schemas import UserRead, UserCreate, UserUpdate
+from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(
     fastapi_users.get_auth_router(jwt_backend), prefix="/auth/jwt", tags=["auth"]
