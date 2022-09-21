@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 
 from app.auth.router import custom_auth_router
@@ -7,6 +8,15 @@ from app.extensions.router import router as ext_router
 from app.versions.router import router as vs_router
 from app.schemas import UserRead, UserCreate, UserUpdate
 from starlette.middleware.cors import CORSMiddleware
+
+
+# Make sure the data path exists
+p = os.path.join(os.getcwd(), "data/files")
+try:
+    os.makedirs(p)
+except FileExistsError:
+    pass
+
 
 app = FastAPI()
 
