@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from fastapi import APIRouter, Body, Depends, Query
+from fastapi import APIRouter, Body, Depends, Query, File, UploadFile
 from app.users import current_active_user
 from app.db import User, get_async_session
 import app.versions.schema as s
@@ -11,6 +11,9 @@ router = APIRouter()
 @router.post(
     "/add/{extension_id}",
     response_model=s.ExtensionVersion,
+    responses={
+        409: {"description": "Version number already exists for this extension"}
+    },
     summary="Add a new version to an extension",
 )
 async def add_extension_version(
@@ -49,15 +52,16 @@ async def update_extension_version(
 
 @router.post(
     "/upload/{version_id}",
-    response_model=bool,
-    summary="Upload a extension zip file",
+    response_model=s.VersionFile,
+    summary="Upload a extension zip file for a version.",
 )
 async def upload_extension_version_file(
     version_id: int = Query(description="ID of the version this file belongs to"),
     db: Session = Depends(get_async_session),
     user: User = Depends(current_active_user),
+    file: UploadFile = File(...),
 ):
-    return True
+    return await service.upload_version_file(version_id, db, user, file)
 
 
 @router.post(

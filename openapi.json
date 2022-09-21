@@ -1103,6 +1103,9 @@
               }
             }
           },
+          "409": {
+            "description": "Version number already exists for this extension"
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -1249,7 +1252,7 @@
         "tags": [
           "Versions"
         ],
-        "summary": "Upload a extension zip file",
+        "summary": "Upload a extension zip file for a version.",
         "operationId": "upload_extension_version_file_version_upload__version_id__post",
         "parameters": [
           {
@@ -1262,14 +1265,23 @@
             "in": "path"
           }
         ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_extension_version_file_version_upload__version_id__post"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Response Upload Extension Version File Version Upload  Version Id  Post",
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/VersionFile"
                 }
               }
             }
@@ -1486,6 +1498,20 @@
           }
         }
       },
+      "Body_upload_extension_version_file_version_upload__version_id__post": {
+        "title": "Body_upload_extension_version_file_version_upload__version_id__post",
+        "required": [
+          "file"
+        ],
+        "type": "object",
+        "properties": {
+          "file": {
+            "title": "File",
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
       "Body_verify_request_token_auth_request_verify_token_post": {
         "title": "Body_verify_request_token_auth_request_verify_token_post",
         "required": [
@@ -1634,8 +1660,10 @@
           "major",
           "minor",
           "patch",
+          "semver",
           "id",
-          "extension_id"
+          "extension_id",
+          "is_latest"
         ],
         "type": "object",
         "properties": {
@@ -1656,6 +1684,16 @@
             "type": "string",
             "default": ""
           },
+          "status": {
+            "title": "Status",
+            "type": "integer",
+            "description": "\n        0: `draft` - For testing, not yet released, only visible to extension admins.\n        1: `private` - Released, but for visible testers only.\n        2: `public` - For public consumption.\n        3: `deprecated` - No longer recommended for use.\n        4: `withdrawn` - No longer available for use. Use a different version.\n        ",
+            "default": 0
+          },
+          "semver": {
+            "title": "Semver",
+            "type": "string"
+          },
           "id": {
             "title": "Id",
             "type": "integer"
@@ -1663,6 +1701,14 @@
           "extension_id": {
             "title": "Extension Id",
             "type": "integer"
+          },
+          "is_latest": {
+            "title": "Is Latest",
+            "type": "boolean"
+          },
+          "If this version has a file attached to it. A version must have an source file to publish it officially.": {
+            "title": "If This Version Has A File Attached To It. A Version Must Have An Source File To Publish It Officially.",
+            "type": "string"
           }
         }
       },
@@ -1691,6 +1737,12 @@
             "title": "Note",
             "type": "string",
             "default": ""
+          },
+          "status": {
+            "title": "Status",
+            "type": "integer",
+            "description": "\n        0: `draft` - For testing, not yet released, only visible to extension admins.\n        1: `private` - Released, but for visible testers only.\n        2: `public` - For public consumption.\n        3: `deprecated` - No longer recommended for use.\n        4: `withdrawn` - No longer available for use. Use a different version.\n        ",
+            "default": 0
           }
         }
       },
@@ -1719,6 +1771,12 @@
           "note": {
             "title": "Note",
             "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "integer",
+            "description": "\n        0: `draft` - For testing, not yet released, only visible to extension admins.\n        1: `private` - Released, but for visible testers only.\n        2: `public` - For public consumption.\n        3: `deprecated` - No longer recommended for use.\n        4: `withdrawn` - No longer available for use. Use a different version.\n        ",
+            "default": 0
           }
         }
       },
@@ -1918,6 +1976,32 @@
           "type": {
             "title": "Error Type",
             "type": "string"
+          }
+        }
+      },
+      "VersionFile": {
+        "title": "VersionFile",
+        "required": [
+          "id",
+          "file_name",
+          "version_id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string",
+            "description": "UUID of the extension"
+          },
+          "file_name": {
+            "title": "File Name",
+            "type": "string",
+            "description": "Original filename"
+          },
+          "version_id": {
+            "title": "Version Id",
+            "type": "integer",
+            "description": "ID of the version this file belongs to"
           }
         }
       }
