@@ -22,7 +22,7 @@ async def add_version(
     if db_ext.owner != str(user.id):
         raise Exception("You are not the owner of this extension!")
 
-    semver = f"{input.major}.{input.minor}.{input.patch}"
+    semver = f"ext{ext_id}_{input.major}.{input.minor}.{input.patch}"
     db_vs = models.ExtensionVersion(**input.dict(), semver=semver, extension_id=ext_id)
     try:
         db.add(db_vs)
