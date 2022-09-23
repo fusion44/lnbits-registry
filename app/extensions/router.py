@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from fastapi import APIRouter, Body, Depends, Query
+from fastapi import APIRouter, Body, Depends, Query, Path
 from app.users import current_active_user
 from app.db import User, get_async_session
 import app.extensions.schema as s
@@ -47,3 +47,14 @@ async def list_extensions(
     limit: int = 100,
 ):
     return await service.list_all_extensions(db, skip, limit)
+
+
+@router.get("/get/{extension_id}", response_model=s.Extension)
+async def get_extension(
+    extension_id: int
+    | str = Path(
+        description="`id` (int) or `name` (string) of the extension",
+    ),
+    db: Session = Depends(get_async_session),
+):
+    return await service.get_extension(extension_id, db)

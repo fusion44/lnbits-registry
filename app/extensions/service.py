@@ -1,9 +1,11 @@
-import imp
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 import app.extensions.schema as schema
 import app.extensions.models as models
 from app.db import User
+from fastapi import HTTPException
+from app.extensions.exceptions import ExtensionNotFound
+
 
 # CRUD service for extensions
 
@@ -52,3 +54,18 @@ async def update_extension(
     await db.commit()
     await db.refresh(db_ext)
     return db_ext
+
+
+async def get_extension(id: int | str, db: Session) -> schema.Extension:
+    if isinstance(id, str):
+        q = select(models.Extension).where(models.Extension.name == id)
+        res = await db.execute(q)
+        res = res.unique().scalar_one_or_none()
+        if res is None:
+            raise ExtensionNotFound()
+
+        return res
+    if isinstance(id, int):
+        return await db.get(models.Extension, id)
+
+    raise HTTPException("Id must either be an positive int or a non-empty string")
