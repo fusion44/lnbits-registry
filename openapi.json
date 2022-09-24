@@ -885,12 +885,12 @@
       }
     },
     "/ext/delete/{extension_id}": {
-      "post": {
+      "delete": {
         "tags": [
           "Extensions"
         ],
         "summary": "Delete Extension",
-        "operationId": "delete_extension_ext_delete__extension_id__post",
+        "operationId": "delete_extension_ext_delete__extension_id__delete",
         "parameters": [
           {
             "required": true,
@@ -947,13 +947,13 @@
       }
     },
     "/ext/update/{extension_id}": {
-      "post": {
+      "patch": {
         "tags": [
           "Extensions"
         ],
         "summary": "Update Extension",
         "description": "Update an extension. Only the owner can do this. Only non-null fields will be updated.",
-        "operationId": "update_extension_ext_update__extension_id__post",
+        "operationId": "update_extension_ext_update__extension_id__patch",
         "parameters": [
           {
             "required": true,
@@ -1064,6 +1064,57 @@
         }
       }
     },
+    "/ext/get/{extension_id}": {
+      "get": {
+        "tags": [
+          "Extensions"
+        ],
+        "summary": "Get Extension",
+        "operationId": "get_extension_ext_get__extension_id__get",
+        "parameters": [
+          {
+            "description": "`id` (int) or `name` (string) of the extension",
+            "required": true,
+            "schema": {
+              "title": "Extension Id",
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "description": "`id` (int) or `name` (string) of the extension"
+            },
+            "name": "extension_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Extension"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/version/add/{extension_id}": {
       "post": {
         "tags": [
@@ -1128,12 +1179,12 @@
       }
     },
     "/version/delete/{version_id}": {
-      "post": {
+      "delete": {
         "tags": [
           "Versions"
         ],
         "summary": "Delete Extension Version",
-        "operationId": "delete_extension_version_version_delete__version_id__post",
+        "operationId": "delete_extension_version_version_delete__version_id__delete",
         "parameters": [
           {
             "required": true,
@@ -1187,13 +1238,13 @@
       }
     },
     "/version/update/{version_id}": {
-      "post": {
+      "patch": {
         "tags": [
           "Versions"
         ],
         "summary": "Update a version.",
         "description": "Only the extension owner can do this. Only non-null fields will be updated.",
-        "operationId": "update_extension_version_version_update__version_id__post",
+        "operationId": "update_extension_version_version_update__version_id__patch",
         "parameters": [
           {
             "required": true,
@@ -1245,6 +1296,46 @@
             "APIKeyCookie": []
           }
         ]
+      }
+    },
+    "/version/download/{version_id}": {
+      "get": {
+        "tags": [
+          "Versions"
+        ],
+        "summary": "Download a extension zip file for the given version",
+        "operationId": "download_extension_version_file_version_download__version_id__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Version Id",
+              "type": "integer"
+            },
+            "name": "version_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/version/upload/{version_id}": {
@@ -1308,12 +1399,12 @@
       }
     },
     "/version/list/{extension_id}": {
-      "post": {
+      "get": {
         "tags": [
           "Versions"
         ],
         "summary": "List all versions for an extension",
-        "operationId": "list_extensions_version_list__extension_id__post",
+        "operationId": "list_extensions_version_list__extension_id__get",
         "parameters": [
           {
             "required": true,
@@ -1351,7 +1442,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Response List Extensions Version List  Extension Id  Post",
+                  "title": "Response List Extensions Version List  Extension Id  Get",
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/ExtensionVersion"

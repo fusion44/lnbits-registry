@@ -17,7 +17,7 @@ async def add_extension(
     return await service.add_extension(db, i, user)
 
 
-@router.post("/delete/{extension_id}", response_model=s.Extension)
+@router.delete("/delete/{extension_id}", response_model=s.Extension)
 async def delete_extension(
     extension_id: int = Query(description="ID of the extension"),
     id: int = Body(description="ID of the extension"),
@@ -26,7 +26,7 @@ async def delete_extension(
     return s.Extension()
 
 
-@router.post(
+@router.patch(
     "/update/{extension_id}",
     response_model=s.Extension,
     description="Update an extension. Only the owner can do this. Only non-null fields will be updated.",

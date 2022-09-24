@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Body, Depends, Query, File, UploadFile
+from fastapi.responses import FileResponse
 from app.users import current_active_user
 from app.db import User, get_async_session
 import app.versions.schema as s
@@ -25,7 +26,7 @@ async def add_extension_version(
     return await service.add_version(extension_id, db, input, user)
 
 
-@router.post("/delete/{version_id}", response_model=s.ExtensionVersion)
+@router.delete("/delete/{version_id}", response_model=s.ExtensionVersion)
 async def delete_extension_version(
     version_id: int = Query(description="ID of the extension"),
     user: User = Depends(current_active_user),
@@ -35,7 +36,7 @@ async def delete_extension_version(
     return s.Extension()
 
 
-@router.post(
+@router.patch(
     "/update/{version_id}",
     response_model=s.ExtensionVersion,
     summary="Update a version.",
@@ -75,7 +76,7 @@ async def upload_extension_version_file(
     return await service.upload_version_file(version_id, db, user, file)
 
 
-@router.post(
+@router.get(
     "/list/{extension_id}",
     response_model=list[s.ExtensionVersion],
     summary="List all versions for an extension",
