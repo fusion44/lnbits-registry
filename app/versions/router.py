@@ -50,6 +50,17 @@ async def update_extension_version(
     return await service.update_version(version_id, db, i, user)
 
 
+@router.get(
+    "/download/{version_id}",
+    summary="Download a extension zip file for the given version",
+)
+async def download_extension_version_file(
+    version_id: int = Query(description="ID of the version this file belongs to"),
+    db: Session = Depends(get_async_session),
+) -> FileResponse:
+    return await service.download_version_file(version_id, db)
+
+
 @router.post(
     "/upload/{version_id}",
     response_model=s.VersionFile,

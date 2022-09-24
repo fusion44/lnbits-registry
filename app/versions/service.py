@@ -8,6 +8,8 @@ import app.extensions.models as ext_models
 import app.versions.models as models
 from app.db import User
 from fastapi import UploadFile, HTTPException, status
+from fastapi.responses import FileResponse
+
 
 # CRUD service for extension versions
 
@@ -81,6 +83,31 @@ async def update_version(
     await db.commit()
     await db.refresh(version)
     return db_ext
+
+
+async def download_version_file(version_id: int, db: Session) -> FileResponse:
+    version = await db.get(models.ExtensionVersion, version_id)
+
+    if version is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"A version with id {version_id} does not exist!",
+        )
+
+    if version.file_id is None or version.file_id == "":
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The version {version_id} has no file attached!",
+        )
+
+    file_path = os.path.join(CURR_CWD, "data/files", f"{version.file_id}.zip")
+
+    file = await db.get(models.VersionFile, version.file_id)
+    file_name = file.file_name
+
+    return FileResponse(
+        path=file_path, media_type="application/octet-stream", filename=file_name
+    )
 
 
 async def upload_version_file(
