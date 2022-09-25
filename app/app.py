@@ -1,5 +1,7 @@
 import os
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 
 from app.auth.router import custom_auth_router
 from app.db import create_db_and_tables
@@ -28,6 +30,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount(f"/static", StaticFiles(directory="app/static/"), name="static")
+
+
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+def index():
+    with open("app/static/index.html") as f:
+        lines = f.read()
+
+    return HTMLResponse(lines)
+
 
 app.include_router(
     fastapi_users.get_auth_router(jwt_backend), prefix="/auth/jwt", tags=["auth"]
