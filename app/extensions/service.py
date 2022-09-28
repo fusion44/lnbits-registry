@@ -24,10 +24,17 @@ async def add_extension(
 
 
 async def list_all_extensions(
-    db: Session, skip: int = 0, limit: int = 100
+    db: Session,
+    skip: int = 0,
+    limit: int = 100,
+    include_unversioned: bool = False,
 ) -> list[schema.Extension]:
     res = await db.execute(select(models.Extension).offset(skip).limit(limit))
     b = res.unique().scalars().all()
+
+    if not include_unversioned:
+        b = [i for i in b if len(i.versions) > 0]
+
     return b
 
 

@@ -45,8 +45,11 @@ async def list_extensions(
     db: Session = Depends(get_async_session),
     skip: int = 0,
     limit: int = 100,
+    include_unversioned: bool = Query(
+        False, description="Include extensions without any versions attached to them."
+    ),
 ):
-    return await service.list_all_extensions(db, skip, limit)
+    return await service.list_all_extensions(db, skip, limit, include_unversioned)
 
 
 @router.get("/get/{extension_id}", response_model=s.Extension)

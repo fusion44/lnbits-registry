@@ -1034,6 +1034,18 @@
             },
             "name": "limit",
             "in": "query"
+          },
+          {
+            "description": "Include extensions without any versions attached to them.",
+            "required": false,
+            "schema": {
+              "title": "Include Unversioned",
+              "type": "boolean",
+              "description": "Include extensions without any versions attached to them.",
+              "default": false
+            },
+            "name": "include_unversioned",
+            "in": "query"
           }
         ],
         "responses": {
