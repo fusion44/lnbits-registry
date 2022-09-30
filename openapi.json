@@ -1669,6 +1669,7 @@
         "title": "Extension",
         "required": [
           "name",
+          "prefix",
           "owner"
         ],
         "type": "object",
@@ -1689,6 +1690,13 @@
             "type": "string",
             "description": "An elaborate description what the extension does",
             "default": ""
+          },
+          "prefix": {
+            "title": "Prefix",
+            "maxLength": 40,
+            "minLength": 3,
+            "type": "string",
+            "description": "The extension prefix as defined in the extensions `__init__.py` file. Max characters: 40\n        \n        bleskomat_ext: APIRouter = APIRouter(prefix=\"*/bleskomat*\", tags=[\"Bleskomat\"])\n        "
           },
           "id": {
             "title": "Id",
@@ -1713,7 +1721,8 @@
       "ExtensionInput": {
         "title": "ExtensionInput",
         "required": [
-          "name"
+          "name",
+          "prefix"
         ],
         "type": "object",
         "properties": {
@@ -1733,6 +1742,13 @@
             "type": "string",
             "description": "An elaborate description what the extension does",
             "default": ""
+          },
+          "prefix": {
+            "title": "Prefix",
+            "maxLength": 40,
+            "minLength": 3,
+            "type": "string",
+            "description": "The extension prefix as defined in the extensions `__init__.py` file. Max characters: 40\n        \n        bleskomat_ext: APIRouter = APIRouter(prefix=\"*/bleskomat*\", tags=[\"Bleskomat\"])\n        "
           }
         }
       },

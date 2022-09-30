@@ -12,7 +12,7 @@ Base: DeclarativeMeta = declarative_base()
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
-    display_name = Column(String(length=32), nullable=False)
+    display_name = Column(String(length=32), nullable=False, unique=True)
 
 
 # connect_args={"check_same_thread": False} is only necessary for SQlite

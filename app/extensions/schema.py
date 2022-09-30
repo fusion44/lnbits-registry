@@ -14,6 +14,15 @@ class ExtensionBase(ORJSONModel):
     description_long: str = Query(
         "", description="An elaborate description what the extension does"
     )
+    prefix: str = Query(
+        ...,
+        description="""The extension prefix as defined in the extensions `__init__.py` file. Max characters: 40
+        
+        bleskomat_ext: APIRouter = APIRouter(prefix="*/bleskomat*", tags=["Bleskomat"])
+        """,
+        max_length=40,
+        min_length=3,
+    )
 
 
 class ExtensionInput(ExtensionBase):

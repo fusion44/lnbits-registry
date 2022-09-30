@@ -1,5 +1,4 @@
 from typing import Any
-from uuid import UUID
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db import Base
@@ -16,12 +15,20 @@ class Extension(Base):
     description_short = Column(String(140))
     description_long = Column(String, default=None)
     owner = Column(String(36), ForeignKey("user.id"))
+    prefix = Column(String(40), unique=True)
     versions = relationship("ExtensionVersion", lazy="joined")
 
     def __init__(
-        self, description_short, description_long, owner, *args: Any, **kwargs: Any
+        self,
+        description_short,
+        description_long,
+        owner,
+        prefix,
+        *args: Any,
+        **kwargs: Any
     ) -> None:
         super().__init__(*args, **kwargs)
         self.description_short = description_short
         self.description_long = description_long
         self.owner = owner
+        self.prefix = prefix
