@@ -1076,30 +1076,67 @@
         }
       }
     },
-    "/ext/get/{extension_id}": {
+    "/ext/get/by-name/{name}": {
       "get": {
         "tags": [
           "Extensions"
         ],
-        "summary": "Get Extension",
-        "operationId": "get_extension_ext_get__extension_id__get",
+        "summary": "Get Extension By Name",
+        "operationId": "get_extension_by_name_ext_get_by_name__name__get",
         "parameters": [
           {
-            "description": "`id` (int) or `name` (string) of the extension",
+            "description": "`name` of the extension",
             "required": true,
             "schema": {
-              "title": "Extension Id",
-              "anyOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "string"
-                }
-              ],
-              "description": "`id` (int) or `name` (string) of the extension"
+              "title": "Name",
+              "type": "string",
+              "description": "`name` of the extension"
             },
-            "name": "extension_id",
+            "name": "name",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Extension"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ext/get/by-id/{id}": {
+      "get": {
+        "tags": [
+          "Extensions"
+        ],
+        "summary": "Get Extension By Id",
+        "operationId": "get_extension_by_id_ext_get_by_id__id__get",
+        "parameters": [
+          {
+            "description": "`id` of the extension",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "integer",
+              "description": "`id` of the extension"
+            },
+            "name": "id",
             "in": "path"
           }
         ],

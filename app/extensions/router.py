@@ -52,12 +52,17 @@ async def list_extensions(
     return await service.list_all_extensions(db, skip, limit, include_unversioned)
 
 
-@router.get("/get/{extension_id}", response_model=s.Extension)
-async def get_extension(
-    extension_id: int
-    | str = Path(
-        description="`id` (int) or `name` (string) of the extension",
-    ),
+@router.get("/get/by-name/{name}", response_model=s.Extension)
+async def get_extension_by_name(
+    name: str = Path(description="`name` of the extension"),
     db: Session = Depends(get_async_session),
 ):
-    return await service.get_extension(extension_id, db)
+    return await service.get_extension(name, db)
+
+
+@router.get("/get/by-id/{id}", response_model=s.Extension)
+async def get_extension_by_id(
+    id: int = Path(description="`id` of the extension"),
+    db: Session = Depends(get_async_session),
+):
+    return await service.get_extension(id, db)
