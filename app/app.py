@@ -1,7 +1,7 @@
 import os
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.auth.router import custom_auth_router
 from app.db import create_db_and_tables
@@ -31,15 +31,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount(f"/static", StaticFiles(directory="app/static/"), name="static")
+app.mount("/console", StaticFiles(directory="app/static", html=True), name="web")
 
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 def index():
-    with open("app/static/index.html") as f:
-        lines = f.read()
+    html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>Page Title</title>
+    </head>
+    <body>
 
-    return HTMLResponse(lines)
+    <h1>LNbits Registry</h1>
+
+    => <a href="/docs">API docs</a>
+    <br><br>
+    => <a href="/console">Console</a>
+
+    </body>
+    </html>
+    """
+    return HTMLResponse(html)
 
 
 app.include_router(
